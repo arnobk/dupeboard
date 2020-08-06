@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
@@ -8,6 +10,7 @@ import 'database.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:http/http.dart' as http;
 
 class DupeUtils {
   DupeUtils._();
@@ -159,5 +162,20 @@ class DupeUtils {
     }
 
     return status;
+  }
+
+  checkForUpdates() async {
+    var githubAPI = 'https://api.github.com/repos/arnobk/dupeboard/releases';
+
+    var releaseInfo = await http.get(githubAPI);
+    if (releaseInfo.statusCode == 200) {
+      if (json.decode(releaseInfo.body).toString() != '[]') {
+        return json.decode(releaseInfo.body)[0]['tag_name'];
+      } else {
+        return 'N/A'; // No Release Found
+      }
+    } else {
+      throw Exception('Unable to check for updates.');
+    }
   }
 }

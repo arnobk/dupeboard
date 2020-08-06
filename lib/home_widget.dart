@@ -99,6 +99,9 @@ class _HomeState extends State<Home> {
 
     scaffoldKey.currentState
       ..removeCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text("$result")));
+      ..showSnackBar(SnackBar(
+        content: Text("$result"),
+        duration: Duration(seconds: 2),
+      ));
   }
 }

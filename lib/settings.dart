@@ -1,5 +1,7 @@
 import 'package:dupeboard/utils/dupe_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info/package_info.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Settings extends StatefulWidget {
   @override
@@ -67,100 +69,6 @@ class _SettingsState extends State<Settings> {
               selected: true,
               onTap: _restoreBackup,
             ),
-            // Container(
-            //   margin: EdgeInsets.symmetric(horizontal: 16),
-            //   child: Row(
-            //     children: <Widget>[
-            //       Expanded(
-            //         flex: 1,
-            //         child: ButtonTheme(
-            //           shape: RoundedRectangleBorder(
-            //               side: BorderSide(
-            //                   color: Theme.of(context).primaryColor, width: 1),
-            //               borderRadius: BorderRadius.circular(5)),
-            //           child: RaisedButton(
-            //             elevation: 0,
-            //             focusElevation: 0,
-            //             highlightElevation: 0,
-            //             hoverElevation: 0,
-            //             disabledElevation: 0,
-            //             color: Colors.white,
-            //             onPressed: _createBackup,
-            //             child: Container(
-            //               padding: EdgeInsets.symmetric(vertical: 20),
-            //               child: Row(
-            //                 mainAxisAlignment: MainAxisAlignment.center,
-            //                 children: <Widget>[
-            //                   Icon(
-            //                     Icons.backup,
-            //                     size: 28,
-            //                     color: Theme.of(context).primaryColor,
-            //                   ),
-            //                   SizedBox(
-            //                     width: 8,
-            //                   ),
-            //                   Text(
-            //                     'Backup',
-            //                     style: TextStyle(
-            //                       fontSize: 20,
-            //                       fontWeight: FontWeight.w500,
-            //                       color: Theme.of(context).primaryColor,
-            //                     ),
-            //                   )
-            //                 ],
-            //               ),
-            //             ),
-            //           ),
-            //         ),
-            //       ),
-            //       SizedBox(
-            //         width: 16,
-            //       ),
-            //       Expanded(
-            //         flex: 1,
-            //         child: ButtonTheme(
-            //           shape: RoundedRectangleBorder(
-            //               side: BorderSide(
-            //                   color: Theme.of(context).primaryColor, width: 1),
-            //               borderRadius: BorderRadius.circular(5)),
-            //           child: RaisedButton(
-            //             elevation: 0,
-            //             focusElevation: 0,
-            //             highlightElevation: 0,
-            //             hoverElevation: 0,
-            //             disabledElevation: 0,
-            //             color: Colors.white,
-            //             onPressed: _restoreBackup,
-            //             child: Container(
-            //               padding: EdgeInsets.symmetric(vertical: 20),
-            //               child: Row(
-            //                 mainAxisAlignment: MainAxisAlignment.center,
-            //                 children: <Widget>[
-            //                   Icon(
-            //                     Icons.restore,
-            //                     size: 28,
-            //                     color: Theme.of(context).primaryColor,
-            //                   ),
-            //                   SizedBox(
-            //                     width: 8,
-            //                   ),
-            //                   Text(
-            //                     'Restore',
-            //                     style: TextStyle(
-            //                       fontSize: 20,
-            //                       fontWeight: FontWeight.w500,
-            //                       color: Theme.of(context).primaryColor,
-            //                     ),
-            //                   )
-            //                 ],
-            //               ),
-            //             ),
-            //           ),
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
             SizedBox(
               height: 30,
             ),
@@ -234,7 +142,7 @@ class _SettingsState extends State<Settings> {
               trailing: Icon(Icons.arrow_forward_ios),
               selected: true,
               subtitle: Text('Current Version: 1.0.0'),
-              onTap: () {},
+              onTap: _checkUpdate,
             ),
             SizedBox(
               height: 20,
@@ -257,7 +165,9 @@ class _SettingsState extends State<Settings> {
               ),
               trailing: Icon(Icons.arrow_forward_ios),
               selected: true,
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, '/developer');
+              },
             ),
             ListTile(
               dense: true,
@@ -269,7 +179,7 @@ class _SettingsState extends State<Settings> {
               ),
               trailing: Icon(Icons.arrow_forward_ios),
               selected: true,
-              onTap: () {},
+              onTap: () => _launchURL('https://github.com/arnobk/dupeboard'),
             ),
           ],
         ));
@@ -285,12 +195,14 @@ class _SettingsState extends State<Settings> {
             SnackBar(
               content: Text(
                   'Backup Successful. Find Backup files at Dupeboard folder of your Internal Storage.'),
+              duration: Duration(seconds: 2),
             ),
           );
       } else {
         Scaffold.of(context).showSnackBar(
           SnackBar(
             content: Text('Backup Failed!'),
+            duration: Duration(seconds: 2),
           ),
         );
       }
@@ -306,15 +218,74 @@ class _SettingsState extends State<Settings> {
           ..showSnackBar(
             SnackBar(
               content: Text('Backup restored successfully.'),
+              duration: Duration(seconds: 2),
             ),
           );
       } else {
         Scaffold.of(context).showSnackBar(
           SnackBar(
             content: Text('Restore Failed!'),
+            duration: Duration(seconds: 2),
           ),
         );
       }
+    }
+  }
+
+  _checkUpdate() async {
+    Scaffold.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text('Checking for updates.'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    var version = await DupeUtils.services.checkForUpdates();
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    if (version != packageInfo.version && version != 'N/A') {
+      showDialog(
+          context: context,
+          builder: (BuildContext cntx) {
+            return AlertDialog(
+              title: new Text("Update Available!"),
+              content: new Text(
+                  "There is a new version of this app is available to download."),
+              actions: <Widget>[
+                new FlatButton(
+                  child: new Text("Cancel"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                new FlatButton(
+                  child: new Text("Update"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    _launchURL(
+                        'https://github.com/arnobk/dupeboard/releases/tag/$version');
+                  },
+                ),
+              ],
+            );
+          });
+    } else {
+      Scaffold.of(context)
+        ..removeCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text('No update available!'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+    }
+  }
+
+  _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
     }
   }
 }
