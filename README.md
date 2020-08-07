@@ -1,16 +1,30 @@
-# dupeboard
+[![Github All Releases](https://img.shields.io/github/downloads/arnobk/dupeboard/total.svg)](https://github.com/arnobk/dupeboard/releases)
 
-A new Flutter project.
+# Dupeboard
 
-## Getting Started
+An android app to track GTA Online car sell limits. Helpful for those who are into glitch.
 
-This project is a starting point for a Flutter application.
+This app is built with Flutter. If anyone want to build this app for iOS, you can start contributing.
 
-A few resources to get you started if this is your first Flutter project:
+## Features
+- Track car sell limits.
+- Provides notifications.
+- Offline Database.
+- Backup/Restore your database.
+- Setting to toggle notifications.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## Screenshots
+<img src="github_assets/screenshot1.png" style="height: 200px" alt="screenshot_1"/>
+<img src="github_assets/screenshot2.png" style="height: 200px" alt="screenshot_2"/>
+<img src="github_assets/screenshot3.png" style="height: 200px" alt="screenshot_3"/>
+<img src="github_assets/screenshot4.png" style="height: 200px" alt="screenshot_4"/>
+<img src="github_assets/screenshot5.png" style="height: 200px" alt="screenshot_5"/>
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Issues/Feature Requests
+If you find any bug then please create an issue. Same goes for feature requests.
+
+## Changelog
+v1.0.0
+- Initial Release (7 August 2020)
+
+

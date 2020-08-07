@@ -29,9 +29,9 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: EdgeInsets.only(top: 104, bottom: 64),
-        margin: EdgeInsets.symmetric(horizontal: 20),
+    return SingleChildScrollView(
+      child: Container(
+        padding: EdgeInsets.only(top: 104, bottom: 84, left: 16, right: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -207,7 +207,9 @@ class _SettingsState extends State<Settings> {
               onTap: () => _launchURL('https://github.com/arnobk/dupeboard'),
             ),
           ],
-        ));
+        ),
+      ),
+    );
   }
 
   _createBackup() async {
@@ -220,7 +222,7 @@ class _SettingsState extends State<Settings> {
             SnackBar(
               content: Text(
                   'Backup Successful. Find Backup files at Dupeboard folder of your Internal Storage.'),
-              duration: Duration(seconds: 2),
+              duration: Duration(seconds: 4),
             ),
           );
       } else {

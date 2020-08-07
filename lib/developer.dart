@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DeveloperScreen extends StatelessWidget {
   @override
@@ -54,9 +55,59 @@ class DeveloperScreen extends StatelessWidget {
                 color: Colors.grey[700],
               ),
             ),
+            SizedBox(
+              height: 8,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                IconButton(
+                  icon: Image.asset(
+                    'assets/images/github.png',
+                    height: 28,
+                    width: 28,
+                  ),
+                  onPressed: () => _launchURL('https://github.com/arnobk'),
+                ),
+                IconButton(
+                  icon: Image.asset(
+                    'assets/images/facebook.png',
+                    height: 28,
+                    width: 28,
+                  ),
+                  onPressed: () =>
+                      _launchURL('https://facebook.com/arnobology'),
+                ),
+                IconButton(
+                  icon: Image.asset(
+                    'assets/images/twitter.png',
+                    height: 28,
+                    width: 28,
+                  ),
+                  onPressed: () =>
+                      _launchURL('https://twitter.com/igeniusarnob'),
+                ),
+                IconButton(
+                  icon: Image.asset(
+                    'assets/images/search.png',
+                    height: 28,
+                    width: 28,
+                  ),
+                  onPressed: () => _launchURL('https://arnob.me'),
+                ),
+              ],
+            )
           ],
         ),
       ),
     );
+  }
+
+  _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }
