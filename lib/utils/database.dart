@@ -28,7 +28,6 @@ class DBProvider {
 
   newDupe(Dupe dupe) async {
     final db = await getDb();
-    print(dupe.timestamp);
     var res = await db.rawInsert(
         "INSERT INTO dupes (date, time, timestamp) VALUES(?,?,?)",
         [dupe.date, dupe.time, dupe.timestamp]);
@@ -51,7 +50,6 @@ class DBProvider {
     final db = await getDb();
     var count = await db.rawQuery(
         'SELECT * from dupes WHERE timestamp > ${DateTime.now().millisecondsSinceEpoch - minute * 60000}');
-    //print('count: ${count.length}');
     return count.length;
   }
 
@@ -89,7 +87,6 @@ class DBProvider {
         notificationTime.add(value[i]['timestamp']);
       }
     });
-    //print('notificationTime: $notificationTime');
     return notificationTime;
   }
 }

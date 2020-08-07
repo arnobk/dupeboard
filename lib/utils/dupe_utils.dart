@@ -11,28 +11,39 @@ import 'package:sqflite/sqflite.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DupeUtils {
   DupeUtils._();
   static final DupeUtils services = DupeUtils._();
 
-  getNotificationTimeAndScheduleNotification() {
+  getNotificationTimeAndScheduleNotification() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool notifyFive =
+        prefs.getBool('nFive') != null ? prefs.getBool('nFive') : true;
+    bool notifySix =
+        prefs.getBool('nSix') != null ? prefs.getBool('nSix') : true;
+
     DBProvider.db.getNotificationTime().then((value) {
-      if (value.length >= 5) {
+      if (value.length > 5 && notifyFive) {
         _createScheduledNotification(
           value[5],
           5,
           'Ready For Back to Back Dupe Sale',
           'Your dupe sale count for last 30 hours is now 5. Go, Grab some \$GTA.',
         );
+      } else if (value.length <= 5) {
+        cancelScheduledNotification(5);
       }
-      if (value.length >= 6) {
+      if (value.length > 6 && notifySix) {
         _createScheduledNotification(
           value[6],
           6,
           'Dupe Sale Cooldown Achieved',
           'Your dupe sale count for last 30 hours is now below 7. You can start selling.',
         );
+      } else if (value.length <= 6) {
+        cancelScheduledNotification(6);
       }
     });
   }
@@ -79,8 +90,6 @@ class DupeUtils {
         DateTime.fromMillisecondsSinceEpoch(time).add(Duration(hours: 30)),
         //DateTime.now().add(Duration(seconds: 10)),
         platformChannelSpecifics);
-    print(
-        'Notification scheduled at ${DateTime.fromMillisecondsSinceEpoch(time).add(Duration(hours: 30))}');
   }
 
   Future _onSelectNotification(String payload) async {
@@ -89,6 +98,10 @@ class DupeUtils {
   Future _onDidReceiveLocalNotification(
       int id, String title, String body, String payload) async {
     //
+  }
+
+  cancelScheduledNotification(int id) {
+    FlutterLocalNotificationsPlugin().cancel(id);
   }
 
   Future<bool> checkStoragePermission(BuildContext context) async {

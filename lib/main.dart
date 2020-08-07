@@ -32,6 +32,9 @@ class App extends StatelessWidget {
           case '/developer':
             return CupertinoPageRoute(
                 builder: (_) => DeveloperScreen(), settings: settings);
+          default:
+            return CupertinoPageRoute(
+                builder: (_) => Home(), settings: settings);
         }
       },
     );

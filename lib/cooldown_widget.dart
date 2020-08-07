@@ -47,88 +47,93 @@ class _CooldownWidgetState extends State<CooldownWidget> {
           SizedBox(
             height: 15,
           ),
-          ListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              padding: EdgeInsets.all(10),
-              itemCount: dupeCountdown.length,
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                return Container(
-                  margin: EdgeInsets.symmetric(vertical: 8),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          (index + 1).toString(),
-                          style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width * 0.04,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 12,
-                        child: Stack(
-                          children: <Widget>[
-                            FractionallySizedBox(
-                              widthFactor: 1,
-                              child: Container(
-                                height: 20,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                ),
+          dupeCountdown.isNotEmpty
+              ? ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: EdgeInsets.all(10),
+                  itemCount: dupeCountdown.length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      margin: EdgeInsets.symmetric(vertical: 8),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              (index + 1).toString(),
+                              style: TextStyle(
+                                fontSize:
+                                    MediaQuery.of(context).size.width * 0.04,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
                               ),
                             ),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Colors.blue[900],
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                              ),
-                              constraints: BoxConstraints(minWidth: 20),
-                              child: FractionallySizedBox(
-                                widthFactor:
-                                    dupeCountdown[index] / (30 * 3600 * 1000),
-                                child: Container(
-                                  height: 20,
+                          ),
+                          Expanded(
+                            flex: 12,
+                            child: Stack(
+                              children: <Widget>[
+                                FractionallySizedBox(
+                                  widthFactor: 1,
+                                  child: Container(
+                                    height: 20,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10)),
+                                    ),
+                                  ),
                                 ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.blue[900],
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
+                                  ),
+                                  constraints: BoxConstraints(minWidth: 20),
+                                  child: FractionallySizedBox(
+                                    widthFactor: dupeCountdown[index] /
+                                        (30 * 3600 * 1000),
+                                    child: Container(
+                                      height: 20,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            flex: 4,
+                            child: Text(
+                              _getRemainingTime(dupeCountdown[index]),
+                              textAlign: TextAlign.end,
+                              style: TextStyle(
+                                fontSize:
+                                    MediaQuery.of(context).size.width * 0.04,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
                               ),
                             ),
-                          ],
-                        ),
-                        // child: ClipRRect(
-                        //   borderRadius: BorderRadius.all(Radius.circular(10)),
-                        //   child: Container(
-                        //     height: 15,
-                        //     child: LinearProgressIndicator(
-                        //       backgroundColor: Colors.white,
-                        //       value: dupeCountdown[index] / (30 * 3600 * 1000),
-                        //       valueColor: new AlwaysStoppedAnimation<Color>(
-                        //           Colors.blue[900]),
-                        //     ),
-                        //   ),
-                        // ),
+                          )
+                        ],
                       ),
-                      Expanded(
-                        flex: 4,
-                        child: Text(
-                          _getRemainingTime(dupeCountdown[index]),
-                          textAlign: TextAlign.end,
-                          style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width * 0.04,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      )
-                    ],
+                    );
+                  })
+              : Container(
+                  padding: EdgeInsets.symmetric(vertical: 30),
+                  child: Center(
+                    child: Text(
+                      'You haven\'t sold any cars in last 30 hours!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
-                );
-              }),
+                ),
         ],
       ),
     );
@@ -142,8 +147,6 @@ class _CooldownWidgetState extends State<CooldownWidget> {
           dupeCountdown.add(30 * 3600 * 1000 -
               (DateTime.now().millisecondsSinceEpoch - value[i]));
         }
-        //print(DateTime.now().millisecondsSinceEpoch.toString());
-        //print('passeedTime: $dupeCountdown');
       });
     });
   }
@@ -151,7 +154,6 @@ class _CooldownWidgetState extends State<CooldownWidget> {
   String _getRemainingTime(int timeLeft) {
     int hour = timeLeft ~/ (3600 * 1000);
     int min = (timeLeft - hour * 3600 * 1000) ~/ (1000 * 60);
-
     return hour != 0 ? '$hour\h$min\m' : '$min\m';
   }
 }

@@ -95,13 +95,13 @@ class _HomeState extends State<Home> {
             child: AddDupe(),
           );
         });
-    print(result);
-
-    scaffoldKey.currentState
-      ..removeCurrentSnackBar()
-      ..showSnackBar(SnackBar(
-        content: Text("$result"),
-        duration: Duration(seconds: 2),
-      ));
+    if (result != null) {
+      scaffoldKey.currentState
+        ..removeCurrentSnackBar()
+        ..showSnackBar(SnackBar(
+          content: Text("$result"),
+          duration: Duration(seconds: 2),
+        ));
+    }
   }
 }

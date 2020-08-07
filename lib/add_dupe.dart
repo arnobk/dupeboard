@@ -146,14 +146,6 @@ class _AddDupeState extends State<AddDupe> {
   }
 
   _addToDatabase() {
-    // Scaffold.of(widget.context).showSnackBar(
-    //   SnackBar(
-    //     duration: Duration(seconds: 2),
-    //     content: Text('Dupe Added'),
-    //   ),
-    // );
-    // print(
-    //     'year ${pickedDate.year}\nmonth ${pickedDate.month}\ndate ${pickedDate.day.toString()}\nhour ${pickedTime.hour.toString()}\nminute ${pickedTime.minute}');
     var newDupe = Dupe(
       date: pickedDate.toString(),
       time: pickedTime.format(context),

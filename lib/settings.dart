@@ -2,6 +2,7 @@ import 'package:dupeboard/utils/dupe_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends StatefulWidget {
   @override
@@ -11,11 +12,19 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   bool nForCountFive;
   bool nForCountSix;
+  String currentAppVersion = '';
   @override
   void initState() {
     super.initState();
     nForCountFive = true;
     nForCountSix = true;
+    _getCurrentVersion();
+    _getPrefValues();
+  }
+
+  _getPrefValues() async {
+    nForCountFive = await _getNotificationPref('nFive');
+    nForCountSix = await _getNotificationPref('nSix');
   }
 
   @override
@@ -44,10 +53,12 @@ class _SettingsState extends State<Settings> {
                 'Backup',
                 style: TextStyle(
                   fontSize: 18,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
               subtitle: Text(
                 'Create a backup for your database',
+                style: TextStyle(fontSize: 15),
               ),
               trailing: Icon(Icons.arrow_forward_ios),
               selected: true,
@@ -60,10 +71,12 @@ class _SettingsState extends State<Settings> {
                 'Restore',
                 style: TextStyle(
                   fontSize: 18,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
               subtitle: Text(
                 'Restore backup database from storage',
+                style: TextStyle(fontSize: 15),
               ),
               trailing: Icon(Icons.arrow_forward_ios),
               selected: true,
@@ -86,14 +99,17 @@ class _SettingsState extends State<Settings> {
                 'Sale count reaches 6',
                 style: TextStyle(
                   fontSize: 18,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
               subtitle: Text(
                 'In last 30 hours',
+                style: TextStyle(fontSize: 15),
               ),
               trailing: Switch(
                   value: nForCountSix,
                   onChanged: (value) {
+                    _setNotificationPref('nSix', 6, value);
                     setState(() {
                       nForCountSix = value;
                     });
@@ -106,14 +122,17 @@ class _SettingsState extends State<Settings> {
                 'Sale count reaches 5',
                 style: TextStyle(
                   fontSize: 18,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
               subtitle: Text(
                 'In last 30 hours',
+                style: TextStyle(fontSize: 15),
               ),
               trailing: Switch(
                   value: nForCountFive,
                   onChanged: (value) {
+                    _setNotificationPref('nFive', 5, value);
                     setState(() {
                       nForCountFive = value;
                     });
@@ -137,11 +156,15 @@ class _SettingsState extends State<Settings> {
                 'Check for updates',
                 style: TextStyle(
                   fontSize: 18,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
               trailing: Icon(Icons.arrow_forward_ios),
               selected: true,
-              subtitle: Text('Current Version: 1.0.0'),
+              subtitle: Text(
+                'Current Version: $currentAppVersion',
+                style: TextStyle(fontSize: 15),
+              ),
               onTap: _checkUpdate,
             ),
             SizedBox(
@@ -161,6 +184,7 @@ class _SettingsState extends State<Settings> {
                 'Developer',
                 style: TextStyle(
                   fontSize: 18,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
               trailing: Icon(Icons.arrow_forward_ios),
@@ -175,6 +199,7 @@ class _SettingsState extends State<Settings> {
                 'Github Repository',
                 style: TextStyle(
                   fontSize: 18,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
               trailing: Icon(Icons.arrow_forward_ios),
@@ -281,11 +306,31 @@ class _SettingsState extends State<Settings> {
     }
   }
 
+  _getCurrentVersion() async {
+    var packageInfo = await PackageInfo.fromPlatform();
+    setState(() {
+      currentAppVersion = packageInfo.version;
+    });
+  }
+
   _launchURL(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
       throw 'Could not launch $url';
     }
+  }
+
+  _setNotificationPref(String notificationId, int id, bool value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(notificationId, value);
+    DupeUtils.services.cancelScheduledNotification(id);
+  }
+
+  _getNotificationPref(String notificationId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(notificationId) != null
+        ? prefs.getBool(notificationId)
+        : true;
   }
 }

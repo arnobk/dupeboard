@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'utils/database.dart';
+import 'dart:math';
 
 class ChartWidget extends StatefulWidget {
   final List<Color> availableColors = [
@@ -18,7 +19,7 @@ class ChartWidget extends StatefulWidget {
 }
 
 class ChartWidgetState extends State<ChartWidget> {
-  final Color barBackgroundColor = const Color(0xff72d8bf);
+  final Color barBackgroundColor = Colors.transparent;
   final Duration animDuration = const Duration(milliseconds: 250);
 
   List<double> graphData = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
@@ -104,7 +105,7 @@ class ChartWidgetState extends State<ChartWidget> {
           width: width,
           backDrawRodData: BackgroundBarChartRodData(
             show: true,
-            y: 10,
+            y: graphData.reduce(max) + 1,
             color: barBackgroundColor,
           ),
         ),
@@ -239,7 +240,6 @@ class ChartWidgetState extends State<ChartWidget> {
 
   _getGraphData() {
     DBProvider.db.getWeekCount().then((value) {
-      //print(value);
       setState(() {
         graphData = value;
       });
