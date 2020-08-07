@@ -6,6 +6,9 @@ An android app to track GTA Online car sell limits. Helpful for those who are in
 
 This app is built with Flutter. If anyone want to build this app for iOS, you can start contributing.
 
+## Releases
+You can download the **Android App** for your device from **Releases** tab or by visiting [here](https://github.com/igeniusarnob/dupeboard/releases). 
+
 ## Features
 - Track car sell limits.
 - Provides notifications.
@@ -14,11 +17,13 @@ This app is built with Flutter. If anyone want to build this app for iOS, you ca
 - Setting to toggle notifications.
 
 ## Screenshots
-<img src="github_assets/screenshot1.png" style="height: 200px" alt="screenshot_1"/>
-<img src="github_assets/screenshot2.png" style="height: 200px" alt="screenshot_2"/>
-<img src="github_assets/screenshot3.png" style="height: 200px" alt="screenshot_3"/>
-<img src="github_assets/screenshot4.png" style="height: 200px" alt="screenshot_4"/>
-<img src="github_assets/screenshot5.png" style="height: 200px" alt="screenshot_5"/>
+<p float="left">
+    <img src="github_assets/screenshot1.png" width="150" alt="screenshot_1"/>
+    <img src="github_assets/screenshot2.png" width="150" alt="screenshot_2"/>
+    <img src="github_assets/screenshot3.png" width="150" alt="screenshot_3"/>
+    <img src="github_assets/screenshot4.png" width="150" alt="screenshot_4"/>
+    <img src="github_assets/screenshot5.png" width="150" alt="screenshot_5"/>
+</p>
 
 ## Issues/Feature Requests
 If you find any bug then please create an issue. Same goes for feature requests.
