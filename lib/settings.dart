@@ -15,7 +15,6 @@ class _SettingsState extends State<Settings> {
   bool nForCountFive;
   bool nForCountSix;
   String currentAppVersion = '';
-  String themePreference = 'System';
   @override
   void initState() {
     super.initState();
@@ -34,7 +33,7 @@ class _SettingsState extends State<Settings> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        padding: EdgeInsets.only(top: 104, bottom: 84, left: 16, right: 16),
+        padding: EdgeInsets.only(top: 16, bottom: 84, left: 16, right: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -241,7 +240,7 @@ class _SettingsState extends State<Settings> {
                 color: Theme.of(context).accentColor,
               ),
               onTap: () {
-                Navigator.pushNamed(context, '/developer');
+                Navigator.pushNamed(context, '/faq');
               },
             ),
             ListTile(

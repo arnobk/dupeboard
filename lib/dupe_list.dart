@@ -18,7 +18,7 @@ class _DupeListState extends State<DupeList> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      padding: EdgeInsets.only(top: 84, bottom: 64),
+      padding: EdgeInsets.only(top: 0, bottom: 64),
       itemCount: dupeData.length,
       itemBuilder: (context, index) {
         //return Text(dupeData.data[index]['id'].toString());

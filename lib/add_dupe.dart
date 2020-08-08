@@ -170,7 +170,7 @@ class _AddDupeState extends State<AddDupe> {
                     surface: Theme.of(context).primaryColor,
                     onSurface: Colors.white,
                   ),
-                  dialogBackgroundColor: Theme.of(context).canvasColor,
+                  dialogBackgroundColor: Theme.of(context).primaryColor,
                 )
               : ThemeData.light(),
           child: child,
@@ -193,8 +193,12 @@ class _AddDupeState extends State<AddDupe> {
         return Theme(
           data: Theme.of(context).appBarTheme.brightness == Brightness.dark
               ? ThemeData.dark().copyWith(
-                  backgroundColor: Theme.of(context).primaryColor,
-                  dialogBackgroundColor: Theme.of(context).canvasColor,
+                  colorScheme: ColorScheme.dark(
+                    primary: Colors.white,
+                    onPrimary: Colors.black,
+                    surface: Theme.of(context).primaryColor,
+                    onSurface: Colors.white,
+                  ),
                 )
               : ThemeData.light(),
           child: child,

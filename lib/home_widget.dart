@@ -29,7 +29,6 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(
           'Dupeboard',
@@ -40,7 +39,7 @@ class _HomeState extends State<Home> {
         backgroundColor: Theme.of(context).appBarTheme.color,
         elevation: 0,
       ),
-      body: _children[_currentIndex],
+      body: SafeArea(child: _children[_currentIndex]),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Theme.of(context).canvasColor,
         unselectedItemColor: Theme.of(context).primaryColorLight,
