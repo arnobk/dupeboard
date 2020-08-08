@@ -34,25 +34,17 @@ class _DupeListState extends State<DupeList> {
               child: Icon(
                 Icons.calendar_today,
                 size: 28,
-                color: Theme.of(context).primaryColor,
+                color: Theme.of(context).iconTheme.color,
               ),
             ),
             title: Text(
               DateFormat('yyyy-MM-dd')
                   .format(DateTime.parse(dupeData[index]['date'])),
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey[600],
-              ),
+              style: Theme.of(context).textTheme.bodyText1,
             ),
             subtitle: Text(
               dupeData[index]['time'].toString(),
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: Colors.grey[600],
-              ),
+              style: Theme.of(context).textTheme.bodyText2,
             ),
             trailing: IconButton(
               icon: Icon(

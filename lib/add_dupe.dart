@@ -36,7 +36,7 @@ class _AddDupeState extends State<AddDupe> {
                 children: [
                   Icon(
                     Icons.calendar_today,
-                    color: Colors.grey[600],
+                    color: Theme.of(context).accentColor,
                   ),
                   SizedBox(
                     width: 8,
@@ -46,11 +46,7 @@ class _AddDupeState extends State<AddDupe> {
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: Text(
                         DateFormat('yyyy-MM-dd').format(pickedDate),
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[600],
-                        ),
+                        style: Theme.of(context).textTheme.bodyText1,
                       ),
                     ),
                   ),
@@ -80,7 +76,7 @@ class _AddDupeState extends State<AddDupe> {
                 children: [
                   Icon(
                     Icons.access_time,
-                    color: Colors.grey[600],
+                    color: Theme.of(context).accentColor,
                   ),
                   SizedBox(
                     width: 8,
@@ -90,11 +86,7 @@ class _AddDupeState extends State<AddDupe> {
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: Text(
                         "${pickedTime.format(context)}",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[600],
-                        ),
+                        style: Theme.of(context).textTheme.bodyText1,
                       ),
                     ),
                   ),
@@ -130,7 +122,7 @@ class _AddDupeState extends State<AddDupe> {
                   elevation: 0,
                   onPressed: _addToDatabase,
                   child: Text('Add Dupe'),
-                  color: Theme.of(context).primaryColor,
+                  color: Theme.of(context).accentColor,
                   textColor: Colors.white,
                   padding: EdgeInsets.symmetric(vertical: 15),
                 ),
@@ -167,6 +159,23 @@ class _AddDupeState extends State<AddDupe> {
       initialDate: pickedDate,
       firstDate: DateTime(DateTime.now().year - 1),
       lastDate: DateTime.now(),
+      helpText: 'SELECT SALE DATE',
+      builder: (BuildContext context, Widget child) {
+        return Theme(
+          data: Theme.of(context).appBarTheme.brightness == Brightness.dark
+              ? ThemeData.dark().copyWith(
+                  colorScheme: ColorScheme.dark(
+                    primary: Colors.white,
+                    onPrimary: Colors.black,
+                    surface: Theme.of(context).primaryColor,
+                    onSurface: Colors.white,
+                  ),
+                  dialogBackgroundColor: Theme.of(context).canvasColor,
+                )
+              : ThemeData.light(),
+          child: child,
+        );
+      },
     );
 
     if (date != null) {
@@ -180,6 +189,17 @@ class _AddDupeState extends State<AddDupe> {
     TimeOfDay time = await showTimePicker(
       context: context,
       initialTime: pickedTime,
+      builder: (BuildContext context, Widget child) {
+        return Theme(
+          data: Theme.of(context).appBarTheme.brightness == Brightness.dark
+              ? ThemeData.dark().copyWith(
+                  backgroundColor: Theme.of(context).primaryColor,
+                  dialogBackgroundColor: Theme.of(context).canvasColor,
+                )
+              : ThemeData.light(),
+          child: child,
+        );
+      },
     );
     if (time != null) {
       setState(() {

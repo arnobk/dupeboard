@@ -33,17 +33,18 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: Text(
           'Dupeboard',
-          style: TextStyle(color: Colors.black),
+          style: Theme.of(context).appBarTheme.textTheme.headline6,
         ),
-        brightness: Brightness.light,
+        brightness: Theme.of(context).appBarTheme.brightness,
         centerTitle: true,
-        backgroundColor: Color(0xF4FFFFFF),
+        backgroundColor: Theme.of(context).appBarTheme.color,
         elevation: 0,
       ),
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,
-        unselectedItemColor: Colors.grey[800],
+        backgroundColor: Theme.of(context).canvasColor,
+        unselectedItemColor: Theme.of(context).primaryColorLight,
+        selectedItemColor: Theme.of(context).accentColor,
         elevation: 8.0,
         onTap: onTabTapped,
         currentIndex: _currentIndex,
@@ -86,7 +87,9 @@ class _HomeState extends State<Home> {
   _showAddDupeSheet() async {
     final result = await showModalBottomSheet(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(15),
+          ),
         ),
         context: context,
         builder: (BuildContext context) {

@@ -7,14 +7,14 @@ class DeveloperScreen extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
+        iconTheme: Theme.of(context).iconTheme,
         title: Text(
           'Developer',
-          style: TextStyle(color: Colors.black),
+          style: Theme.of(context).appBarTheme.textTheme.headline6,
         ),
-        brightness: Brightness.light,
+        brightness: Theme.of(context).appBarTheme.brightness,
         centerTitle: true,
-        backgroundColor: Color(0xF4FFFFFF),
+        backgroundColor: Theme.of(context).appBarTheme.color,
         elevation: 0,
       ),
       body: Container(
@@ -38,10 +38,7 @@ class DeveloperScreen extends StatelessWidget {
             Text(
               'Arnob Karmokar',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w500,
-              ),
+              style: Theme.of(context).textTheme.headline1,
             ),
             SizedBox(
               height: 4,
@@ -49,11 +46,7 @@ class DeveloperScreen extends StatelessWidget {
             Text(
               'Electrical and Electronic Engineer',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w400,
-                color: Colors.grey[700],
-              ),
+              style: Theme.of(context).textTheme.headline4,
             ),
             SizedBox(
               height: 8,
@@ -66,6 +59,8 @@ class DeveloperScreen extends StatelessWidget {
                     'assets/images/github.png',
                     height: 28,
                     width: 28,
+                    color:
+                        Theme.of(context).appBarTheme.textTheme.headline6.color,
                   ),
                   onPressed: () => _launchURL('https://github.com/arnobk'),
                 ),
@@ -92,6 +87,8 @@ class DeveloperScreen extends StatelessWidget {
                     'assets/images/search.png',
                     height: 28,
                     width: 28,
+                    color:
+                        Theme.of(context).appBarTheme.textTheme.headline6.color,
                   ),
                   onPressed: () => _launchURL('https://arnob.me'),
                 ),

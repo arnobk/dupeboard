@@ -106,7 +106,7 @@ class _DupeBoardGridState extends State<DupeBoardGrid> {
       padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
           color: (widget.count / widget.limit) >= 1
-              ? Colors.red[700]
+              ? Theme.of(context).errorColor
               : Theme.of(context).primaryColor,
           borderRadius: BorderRadius.all(Radius.circular(20))),
       child: Container(

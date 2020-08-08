@@ -1,6 +1,8 @@
-import 'package:dupeboard/utils/dupe_utils.dart';
+import 'utils/app_state_notifier.dart';
+import 'utils/dupe_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,6 +15,7 @@ class _SettingsState extends State<Settings> {
   bool nForCountFive;
   bool nForCountSix;
   String currentAppVersion = '';
+  String themePreference = 'System';
   @override
   void initState() {
     super.initState();
@@ -39,7 +42,7 @@ class _SettingsState extends State<Settings> {
               'Backup/Restore',
               style: TextStyle(
                 fontSize: 20,
-                color: Colors.grey[700],
+                color: Colors.grey[600],
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -48,39 +51,95 @@ class _SettingsState extends State<Settings> {
             ),
             ListTile(
               dense: true,
-              leading: Icon(Icons.backup),
+              leading: Icon(
+                Icons.backup,
+                color: Theme.of(context).accentColor,
+              ),
               title: Text(
                 'Backup',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: Theme.of(context).textTheme.headline4,
               ),
               subtitle: Text(
-                'Create a backup for your database',
-                style: TextStyle(fontSize: 15),
+                'Create a backup of your database',
+                style: Theme.of(context).textTheme.headline5,
               ),
-              trailing: Icon(Icons.arrow_forward_ios),
-              selected: true,
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                color: Theme.of(context).accentColor,
+              ),
+              //selected: true,
               onTap: _createBackup,
             ),
             ListTile(
               dense: true,
-              leading: Icon(Icons.restore),
+              leading: Icon(
+                Icons.restore,
+                color: Theme.of(context).accentColor,
+              ),
               title: Text(
                 'Restore',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: Theme.of(context).textTheme.headline4,
               ),
               subtitle: Text(
                 'Restore backup database from storage',
-                style: TextStyle(fontSize: 15),
+                style: Theme.of(context).textTheme.headline5,
               ),
-              trailing: Icon(Icons.arrow_forward_ios),
-              selected: true,
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                color: Theme.of(context).accentColor,
+              ),
               onTap: _restoreBackup,
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Text(
+              'Customization',
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.grey[600],
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 8, left: 20, right: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    'App Theme',
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                  DropdownButton<String>(
+                    value: Provider.of<AppStateNotifier>(context).themeMode,
+                    icon: Icon(Icons.arrow_downward),
+                    iconSize: 24,
+                    iconEnabledColor: Theme.of(context).accentColor,
+                    underline: Container(
+                      height: 1.5,
+                      color: Theme.of(context).accentColor,
+                    ),
+                    style: Theme.of(context).textTheme.headline4,
+                    onChanged: (String newValue) {
+                      Provider.of<AppStateNotifier>(context, listen: false)
+                          .updateTheme(newValue);
+                      // setState(() {
+                      //   dropdownValue = newValue;
+                      // });
+                    },
+                    items: <String>[
+                      'System Default',
+                      'Light Theme',
+                      'Dark Theme'
+                    ].map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
             ),
             SizedBox(
               height: 30,
@@ -89,7 +148,7 @@ class _SettingsState extends State<Settings> {
               'Notifications',
               style: TextStyle(
                 fontSize: 20,
-                color: Colors.grey[700],
+                color: Colors.grey[600],
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -97,14 +156,11 @@ class _SettingsState extends State<Settings> {
               dense: true,
               title: Text(
                 'Sale count reaches 6',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: Theme.of(context).textTheme.headline4,
               ),
               subtitle: Text(
                 'In last 30 hours',
-                style: TextStyle(fontSize: 15),
+                style: Theme.of(context).textTheme.headline5,
               ),
               trailing: Switch(
                   value: nForCountSix,
@@ -120,14 +176,11 @@ class _SettingsState extends State<Settings> {
               dense: true,
               title: Text(
                 'Sale count reaches 5',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: Theme.of(context).textTheme.headline4,
               ),
               subtitle: Text(
                 'In last 30 hours',
-                style: TextStyle(fontSize: 15),
+                style: Theme.of(context).textTheme.headline5,
               ),
               trailing: Switch(
                   value: nForCountFive,
@@ -146,7 +199,7 @@ class _SettingsState extends State<Settings> {
               'Updates',
               style: TextStyle(
                 fontSize: 20,
-                color: Colors.grey[700],
+                color: Colors.grey[600],
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -154,16 +207,15 @@ class _SettingsState extends State<Settings> {
               dense: true,
               title: Text(
                 'Check for updates',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: Theme.of(context).textTheme.headline4,
               ),
-              trailing: Icon(Icons.arrow_forward_ios),
-              selected: true,
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                color: Theme.of(context).accentColor,
+              ),
               subtitle: Text(
                 'Current Version: $currentAppVersion',
-                style: TextStyle(fontSize: 15),
+                style: Theme.of(context).textTheme.headline5,
               ),
               onTap: _checkUpdate,
             ),
@@ -171,24 +223,51 @@ class _SettingsState extends State<Settings> {
               height: 20,
             ),
             Text(
-              'About',
+              'Others',
               style: TextStyle(
                 fontSize: 20,
-                color: Colors.grey[700],
+                color: Colors.grey[600],
                 fontWeight: FontWeight.w600,
               ),
             ),
             ListTile(
               dense: true,
               title: Text(
-                'Developer',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                ),
+                'FAQ',
+                style: Theme.of(context).textTheme.headline4,
               ),
-              trailing: Icon(Icons.arrow_forward_ios),
-              selected: true,
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                color: Theme.of(context).accentColor,
+              ),
+              onTap: () {
+                Navigator.pushNamed(context, '/developer');
+              },
+            ),
+            ListTile(
+              dense: true,
+              title: Text(
+                'Donate',
+                style: Theme.of(context).textTheme.headline4,
+              ),
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                color: Theme.of(context).accentColor,
+              ),
+              onTap: () {
+                Navigator.pushNamed(context, '/developer');
+              },
+            ),
+            ListTile(
+              dense: true,
+              title: Text(
+                'Developer',
+                style: Theme.of(context).textTheme.headline4,
+              ),
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                color: Theme.of(context).accentColor,
+              ),
               onTap: () {
                 Navigator.pushNamed(context, '/developer');
               },
@@ -197,13 +276,12 @@ class _SettingsState extends State<Settings> {
               dense: true,
               title: Text(
                 'Github Repository',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: Theme.of(context).textTheme.headline4,
               ),
-              trailing: Icon(Icons.arrow_forward_ios),
-              selected: true,
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                color: Theme.of(context).accentColor,
+              ),
               onTap: () => _launchURL('https://github.com/arnobk/dupeboard'),
             ),
           ],
