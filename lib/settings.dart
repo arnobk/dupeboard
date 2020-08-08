@@ -106,10 +106,11 @@ class _SettingsState extends State<Settings> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    'App Theme',
+                    'Theme',
                     style: Theme.of(context).textTheme.headline4,
                   ),
                   DropdownButton<String>(
+                    elevation: 1,
                     value: Provider.of<AppStateNotifier>(context).themeMode,
                     icon: Icon(Icons.arrow_downward),
                     iconSize: 24,

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import './utils/database.dart';
 import 'chart_widget.dart';
 import 'cooldown_widget.dart';
+import 'loading_widget.dart';
 
 class Dupeboard extends StatefulWidget {
   @override
@@ -13,7 +14,9 @@ class Dupeboard extends StatefulWidget {
 class _DupeboardState extends State<Dupeboard> {
   var smallCount = 0;
   var largeCount = 0;
-  var graphData = [];
+  Widget chartWidget = ChartWidget();
+  Widget cooldownWidget = CooldownWidget();
+
   @override
   void initState() {
     super.initState();
@@ -22,41 +25,61 @@ class _DupeboardState extends State<Dupeboard> {
     DupeUtils.services.getNotificationTimeAndScheduleNotification();
   }
 
+  Future<void> _refreshScreen() async {
+    _getSmallCount();
+    _getLargeCount();
+    DupeUtils.services.getNotificationTimeAndScheduleNotification();
+
+    chartWidget = LoadingWidget('DupeChart', 'Previous Week Sales');
+    cooldownWidget =
+        LoadingWidget('DupeCooldown', 'Sales Cooldown Time For Last 30 Hours');
+    Timer(Duration(milliseconds: 200), () {
+      setState(() {
+        chartWidget = ChartWidget();
+        cooldownWidget = CooldownWidget();
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        padding: EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 100),
-        child: Column(
-          children: <Widget>[
-            GridView.count(
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10,
-              primary: false,
-              crossAxisCount: 2,
-              shrinkWrap: true,
-              children: <Widget>[
-                DupeBoardGrid(
-                  count: smallCount,
-                  limit: 2,
-                  label: '2 Hours',
-                ),
-                DupeBoardGrid(
-                  count: largeCount,
-                  limit: 7,
-                  label: '30 Hours',
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            ChartWidget(),
-            SizedBox(
-              height: 10,
-            ),
-            CooldownWidget(),
-          ],
+    return RefreshIndicator(
+      backgroundColor: Colors.white,
+      onRefresh: _refreshScreen,
+      child: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 100),
+          child: Column(
+            children: <Widget>[
+              GridView.count(
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
+                primary: false,
+                crossAxisCount: 2,
+                shrinkWrap: true,
+                children: <Widget>[
+                  DupeBoardGrid(
+                    count: smallCount,
+                    limit: 2,
+                    label: '2 Hours',
+                  ),
+                  DupeBoardGrid(
+                    count: largeCount,
+                    limit: 7,
+                    label: '30 Hours',
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              chartWidget,
+              SizedBox(
+                height: 10,
+              ),
+              cooldownWidget,
+            ],
+          ),
         ),
       ),
     );

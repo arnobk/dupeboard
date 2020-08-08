@@ -15,48 +15,56 @@ class _DupeListState extends State<DupeList> {
     _getDupeData();
   }
 
+  Future<void> _refreshScreen() async {
+    _getDupeData();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      padding: EdgeInsets.only(top: 0, bottom: 64),
-      itemCount: dupeData.length,
-      itemBuilder: (context, index) {
-        //return Text(dupeData.data[index]['id'].toString());
-        return Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 5,
-          ),
-          child: ListTile(
-            //onTap: () {},
-            leading: Container(
-              height: double.infinity,
-              child: Icon(
-                Icons.calendar_today,
-                size: 28,
-                color: Theme.of(context).iconTheme.color,
+    return RefreshIndicator(
+      backgroundColor: Colors.white,
+      onRefresh: _refreshScreen,
+      child: ListView.builder(
+        padding: EdgeInsets.only(top: 0, bottom: 64),
+        itemCount: dupeData.length,
+        itemBuilder: (context, index) {
+          //return Text(dupeData.data[index]['id'].toString());
+          return Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 5,
+            ),
+            child: ListTile(
+              //onTap: () {},
+              leading: Container(
+                height: double.infinity,
+                child: Icon(
+                  Icons.calendar_today,
+                  size: 28,
+                  color: Theme.of(context).iconTheme.color,
+                ),
+              ),
+              title: Text(
+                DateFormat('yyyy-MM-dd')
+                    .format(DateTime.parse(dupeData[index]['date'])),
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+              subtitle: Text(
+                dupeData[index]['time'].toString(),
+                style: Theme.of(context).textTheme.bodyText2,
+              ),
+              trailing: IconButton(
+                icon: Icon(
+                  Icons.delete_outline,
+                  size: 28,
+                  color: Colors.red[800],
+                ),
+                onPressed: () => _showDialog(context, dupeData[index]['id']),
               ),
             ),
-            title: Text(
-              DateFormat('yyyy-MM-dd')
-                  .format(DateTime.parse(dupeData[index]['date'])),
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            subtitle: Text(
-              dupeData[index]['time'].toString(),
-              style: Theme.of(context).textTheme.bodyText2,
-            ),
-            trailing: IconButton(
-              icon: Icon(
-                Icons.delete_outline,
-                size: 28,
-                color: Colors.red[800],
-              ),
-              onPressed: () => _showDialog(context, dupeData[index]['id']),
-            ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 

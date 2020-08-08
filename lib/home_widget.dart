@@ -39,7 +39,9 @@ class _HomeState extends State<Home> {
         backgroundColor: Theme.of(context).appBarTheme.color,
         elevation: 0,
       ),
-      body: SafeArea(child: _children[_currentIndex]),
+      body: SafeArea(
+        child: _children[_currentIndex],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Theme.of(context).canvasColor,
         unselectedItemColor: Theme.of(context).primaryColorLight,
@@ -69,7 +71,7 @@ class _HomeState extends State<Home> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showAddDupeSheet(),
-        label: Text('Add New'),
+        label: Text('Add Dupe'),
         icon: Icon(Icons.add),
         elevation: 2,
       ),

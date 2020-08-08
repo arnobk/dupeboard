@@ -5,15 +5,6 @@ import 'utils/database.dart';
 import 'dart:math';
 
 class ChartWidget extends StatefulWidget {
-  final List<Color> availableColors = [
-    Colors.purpleAccent,
-    Colors.yellow,
-    Colors.lightBlue,
-    Colors.orange,
-    Colors.pink,
-    Colors.redAccent,
-  ];
-
   @override
   State<StatefulWidget> createState() => ChartWidgetState();
 }
