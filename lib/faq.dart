@@ -2,6 +2,54 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class FAQScreen extends StatelessWidget {
+  final List<Map<String, String>> faqs = [
+    {
+      'question': 'What is Dupeboard?',
+      'answer':
+          'Dupeboard is a simple app for tracking GTA car selling which is very useful for players who sell glitch cars regularly.',
+    },
+    {
+      'question': 'How to use Dupeboard?',
+      'answer':
+          'When ever you sell any car on GTA Online just add that sale inside the App using "Add Dupe" button from Main Screen. The app will take care of the rest.',
+    },
+    {
+      'question': 'Is internet connection a must to use Dupeboard?',
+      'answer':
+          'This app is fully functional in Offline mode. Your data is stored in your device. However, this app will collect device information and crash report whenever it gets internet connection.',
+    },
+    {
+      'question': 'What to do before updating Dupeboard?',
+      'answer':
+          'Please create a backup of your database before installing any update. In case anything goes wrong, you can restore the database easily.',
+    },
+    {
+      'question': 'How can I update Dupeboard?',
+      'answer':
+          'You can check for update by clicking "Check for Update" from settings page. If there is an update available you will get a prompt to download the update.',
+    },
+    {
+      'question': 'Is Dupeboard free to use?',
+      'answer':
+          'Yes, This app is completely free to use. If you want then you can send me donation using Donate Button on Settings Page.',
+    },
+    {
+      'question': 'Does Dupeboard show Advertisement?',
+      'answer':
+          'No, this app doesn\'t show any advertisement. Although you can support developer by sending donation.',
+    },
+    {
+      'question': 'How can I contribuite to Dupeboard?',
+      'answer':
+          'I have made this app Open Source. If you want to contribute to the development of this app please head over to the github repository of this app.',
+    },
+    {
+      'question': 'Does Dupeboard collect any data from my device?',
+      'answer':
+          'Yes, this app collect your device information and crash reports to improve the app.',
+    },
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,14 +68,12 @@ class FAQScreen extends StatelessWidget {
       body: SafeArea(
         child: Container(
           padding: EdgeInsets.all(16),
-          child: Column(
-            children: [
-              CustomExpansionTile('What is Dupeboard?',
-                  'Dupeboard is a simple app for tracking GTA car selling which is very usefule for duper.'),
-              CustomExpansionTile('What is your question?',
-                  'Dupeboard is a simple app for tracking GTA car selling which is very usefule for duper.'),
-            ],
-          ),
+          child: ListView.builder(
+              itemCount: faqs.length,
+              itemBuilder: (context, index) {
+                return CustomExpansionTile(
+                    faqs[index]['question'], faqs[index]['answer']);
+              }),
         ),
       ),
     );

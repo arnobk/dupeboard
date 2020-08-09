@@ -37,6 +37,11 @@ class AppTheme {
         fontSize: 16,
         fontWeight: FontWeight.w500,
       ),
+      headline6: TextStyle(
+        color: Colors.blue,
+        fontSize: 12,
+        fontWeight: FontWeight.w500,
+      ),
     ),
     canvasColor: Color(0xFFFFFFFF),
     appBarTheme: AppBarTheme(
@@ -105,6 +110,11 @@ class AppTheme {
       headline5: TextStyle(
         color: Colors.white,
         fontSize: 16,
+        fontWeight: FontWeight.w500,
+      ),
+      headline6: TextStyle(
+        color: Colors.white,
+        fontSize: 12,
         fontWeight: FontWeight.w500,
       ),
     ),
