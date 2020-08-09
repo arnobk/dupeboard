@@ -66,12 +66,12 @@ class DeveloperScreen extends StatelessWidget {
                 ),
                 IconButton(
                   icon: Image.asset(
-                    'assets/images/facebook.png',
+                    'assets/images/reddit.png',
                     height: 28,
                     width: 28,
                   ),
                   onPressed: () =>
-                      _launchURL('https://facebook.com/arnobology'),
+                      _launchURL('https://reddit.com/igeniusarnob'),
                 ),
                 IconButton(
                   icon: Image.asset(

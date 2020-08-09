@@ -1,10 +1,10 @@
-import 'utils/app_state_notifier.dart';
-import 'utils/dupe_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'utils/app_state_notifier.dart';
+import 'utils/dupe_utils.dart';
 
 class Settings extends StatefulWidget {
   @override
@@ -140,6 +140,20 @@ class _SettingsState extends State<Settings> {
                   ),
                 ],
               ),
+            ),
+            ListTile(
+              dense: true,
+              title: Text(
+                'Custom License Plates',
+                style: Theme.of(context).textTheme.headline4,
+              ),
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                color: Theme.of(context).accentColor,
+              ),
+              onTap: () {
+                Navigator.pushNamed(context, '/CustomPlates');
+              },
             ),
             SizedBox(
               height: 30,
@@ -322,8 +336,9 @@ class _SettingsState extends State<Settings> {
           ..removeCurrentSnackBar()
           ..showSnackBar(
             SnackBar(
-              content: Text('Backup restored successfully.'),
-              duration: Duration(seconds: 2),
+              content: Text(
+                  'Backup restored successfully. Please relaunch Dupeboard to work properly.'),
+              duration: Duration(seconds: 4),
             ),
           );
       } else {

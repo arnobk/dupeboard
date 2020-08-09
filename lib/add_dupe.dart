@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import './utils/database.dart';
 import 'package:intl/intl.dart';
+import './utils/database.dart';
 import './models/dupe.dart';
 
 class AddDupe extends StatefulWidget {
@@ -12,10 +12,12 @@ class AddDupe extends StatefulWidget {
 class _AddDupeState extends State<AddDupe> {
   DateTime pickedDate;
   TimeOfDay pickedTime;
-
+  var customPlates = [''];
+  String selectedPlate = '';
   @override
   void initState() {
     super.initState();
+    _getCustomPlates();
     pickedDate = DateTime.now();
     pickedTime = TimeOfDay.now();
   }
@@ -24,115 +26,123 @@ class _AddDupeState extends State<AddDupe> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.transparent,
-      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Card(
-            elevation: 0,
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.calendar_today,
-                    color: Theme.of(context).accentColor,
-                  ),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Text(
-                        DateFormat('yyyy-MM-dd').format(pickedDate),
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: _pickDate,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Change',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            ListTile(
+              leading: Text(
+                'License Plate:',
+                style: Theme.of(context).textTheme.bodyText1,
               ),
-            ),
-          ),
-          Card(
-            elevation: 0,
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.access_time,
-                    color: Theme.of(context).accentColor,
-                  ),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Text(
-                        "${pickedTime.format(context)}",
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: _pickTime,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Change',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            child: SizedBox(
-              height: 10,
-            ),
-          ),
-          Flexible(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width - 48,
-                child: RaisedButton(
-                  elevation: 0,
-                  onPressed: _addToDatabase,
-                  child: Text('Add Dupe'),
+              title: DropdownButton<String>(
+                isExpanded: true,
+                elevation: 1,
+                value: selectedPlate,
+                icon: Icon(Icons.arrow_downward),
+                iconSize: 24,
+                iconEnabledColor: Theme.of(context).accentColor,
+                underline: Container(
+                  height: 1.5,
                   color: Theme.of(context).accentColor,
-                  textColor: Colors.white,
-                  padding: EdgeInsets.symmetric(vertical: 15),
+                ),
+                style: Theme.of(context).textTheme.headline4,
+                onChanged: (String newValue) {
+                  setState(() {
+                    selectedPlate = newValue;
+                  });
+                },
+                items:
+                    customPlates.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.calendar_today,
+                color: Theme.of(context).accentColor,
+              ),
+              title: Text(
+                DateFormat('yyyy-MM-dd').format(pickedDate),
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+              trailing: InkWell(
+                onTap: _pickDate,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Change',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue,
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
-          SizedBox(
-            height: 10,
-          )
-        ],
+            ListTile(
+              leading: Icon(
+                Icons.access_time,
+                color: Theme.of(context).accentColor,
+              ),
+              title: Text(
+                "${pickedTime.format(context)}",
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+              trailing: InkWell(
+                onTap: _pickTime,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Change',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: SizedBox(
+                height: 10,
+              ),
+            ),
+            Flexible(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width - 48,
+                  child: RaisedButton(
+                    elevation: 0,
+                    onPressed: _addToDatabase,
+                    child: Text(
+                      'ADD DUPE',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    color: Theme.of(context).accentColor,
+                    textColor: Colors.white,
+                    padding: EdgeInsets.symmetric(vertical: 15),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            )
+          ],
+        ),
       ),
     );
   }
@@ -141,6 +151,7 @@ class _AddDupeState extends State<AddDupe> {
     var newDupe = Dupe(
       date: pickedDate.toString(),
       time: pickedTime.format(context),
+      plate: selectedPlate,
       timestamp: DateTime(
         pickedDate.year,
         pickedDate.month,
@@ -210,5 +221,15 @@ class _AddDupeState extends State<AddDupe> {
         pickedTime = time;
       });
     }
+  }
+
+  _getCustomPlates() async {
+    DBProvider.db.getPlate().then((value) {
+      setState(() {
+        for (int i = 0; i < value.length; i++) {
+          customPlates.add(value[i]['license']);
+        }
+      });
+    });
   }
 }

@@ -1,17 +1,16 @@
+import 'dart:io';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'dart:io';
-import 'database.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'database.dart';
 
 class DupeUtils {
   DupeUtils._();

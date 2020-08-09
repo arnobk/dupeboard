@@ -11,6 +11,17 @@ class AppTheme {
     iconTheme: IconThemeData(
       color: Colors.blue,
     ),
+    dialogTheme: DialogTheme(
+      titleTextStyle: TextStyle(
+        color: Colors.black,
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      ),
+      contentTextStyle: TextStyle(
+        color: Colors.black,
+        fontSize: 16,
+      ),
+    ),
     textTheme: TextTheme(
       bodyText1: TextStyle(
         color: Colors.grey[600],
@@ -80,7 +91,6 @@ class AppTheme {
       contentTextStyle: TextStyle(
         color: Colors.white,
         fontSize: 16,
-        //fontWeight: FontWeight.bold,
       ),
     ),
     iconTheme: IconThemeData(

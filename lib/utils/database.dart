@@ -1,8 +1,9 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqlite_api.dart';
 import 'package:path/path.dart';
-import '../models/dupe.dart';
 import 'dart:async';
+import '../models/dupe.dart';
+import '../models/plate.dart';
 
 class DBProvider {
   DBProvider._();
@@ -18,19 +19,62 @@ class DBProvider {
   Future<dynamic> initDB() async {
     return await openDatabase(
       join(await getDatabasesPath(), 'dupeboard.db'),
-      onCreate: (db, version) {
-        return db.execute(
-            'CREATE TABLE dupes (id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT, time TEXT, timestamp INTEGER)');
+      onConfigure: onConfigure,
+      onCreate: (db, version) async {
+        var batch = db.batch();
+        _createTableDupesV2(batch);
+        _createTablePlateV2(batch);
+        await batch.commit();
       },
-      version: 1,
+      onUpgrade: (db, oldVersion, newVersion) async {
+        var batch = db.batch();
+        if (oldVersion == 1) {
+          _updateTableDupesV1toV2(batch);
+          _createTablePlateV2(batch);
+        }
+        await batch.commit();
+      },
+      version: 2,
+      onDowngrade: onDatabaseDowngradeDelete,
     );
+  }
+
+  /// Let's use FOREIGN KEY constraints
+  Future onConfigure(Database db) async {
+    await db.execute('PRAGMA foreign_keys = ON');
+  }
+
+  /// Create Dupes table V2
+  void _createTableDupesV2(Batch batch) {
+    batch.execute('DROP TABLE IF EXISTS dupes');
+    batch.execute('''CREATE TABLE dupes (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          date TEXT,
+          time TEXT,
+          plate TEXT,
+          timestamp INTEGER
+        )''');
+  }
+
+  /// Update Dupes table V1 to V2
+  void _updateTableDupesV1toV2(Batch batch) {
+    batch.execute('ALTER TABLE dupes ADD plate TEXT');
+  }
+
+  /// Create License Plate table V2
+  void _createTablePlateV2(Batch batch) {
+    batch.execute('DROP TABLE IF EXISTS plates');
+    batch.execute('''CREATE TABLE plates (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        license TEXT
+      )''');
   }
 
   newDupe(Dupe dupe) async {
     final db = await getDb();
     var res = await db.rawInsert(
-        "INSERT INTO dupes (date, time, timestamp) VALUES(?,?,?)",
-        [dupe.date, dupe.time, dupe.timestamp]);
+        "INSERT INTO dupes (date, time, timestamp,plate) VALUES(?,?,?,?)",
+        [dupe.date, dupe.time, dupe.timestamp, dupe.plate]);
     return res;
   }
 
@@ -44,6 +88,25 @@ class DBProvider {
   removeDupe(int id) async {
     final db = await getDb();
     await db.rawQuery('DELETE FROM dupes WHERE id=$id');
+  }
+
+  newPlate(Plate plate) async {
+    final db = await getDb();
+    var res = await db
+        .rawInsert("INSERT INTO plates (license) VALUES(?)", [plate.license]);
+    return res;
+  }
+
+  Future<dynamic> getPlate() async {
+    final db = await getDb();
+    List<Map<String, dynamic>> dupes =
+        await db.rawQuery('SELECT * FROM plates');
+    return dupes;
+  }
+
+  removePlate(int id) async {
+    final db = await getDb();
+    await db.rawQuery('DELETE FROM plates WHERE id=$id');
   }
 
   Future<int> getCount(int minute) async {

@@ -7,6 +7,7 @@ import 'utils/app_state_notifier.dart';
 import 'home_widget.dart';
 import 'developer.dart';
 import 'faq.dart';
+import 'custom_plate.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -45,6 +46,9 @@ class App extends StatelessWidget {
               case '/faq':
                 return CupertinoPageRoute(
                     builder: (_) => FAQScreen(), settings: settings);
+              case '/CustomPlates':
+                return CupertinoPageRoute(
+                    builder: (_) => CustomPlateScreen(), settings: settings);
               default:
                 return CupertinoPageRoute(
                     builder: (_) => Home(), settings: settings);

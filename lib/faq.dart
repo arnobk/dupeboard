@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class FAQScreen extends StatelessWidget {
@@ -27,6 +26,16 @@ class FAQScreen extends StatelessWidget {
       'question': 'How can I update Dupeboard?',
       'answer':
           'You can check for update by clicking "Check for Update" from settings page. If there is an update available you will get a prompt to download the update.',
+    },
+    {
+      'question': 'Is "License Plate" mandatory to Add Dupe?',
+      'answer':
+          'If you don\'t need any "License Plate" to associate with your Dupe then just select the "Blank Option" from License Plate Dropdown Menu.',
+    },
+    {
+      'question': 'How can I add my own license plates to Dropdown?',
+      'answer':
+          'Head over to Settings > Custom License Plate. Then add as many License Plates you want.',
     },
     {
       'question': 'Is Dupeboard free to use?',

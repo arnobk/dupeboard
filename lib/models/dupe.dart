@@ -2,22 +2,7 @@ class Dupe {
   int id;
   String date;
   String time;
+  String plate;
   int timestamp;
-  Dupe({this.id, this.date, this.time, this.timestamp});
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'date': date,
-      'time': time,
-      'timestamp': timestamp,
-    };
-  }
-
-  Dupe.fromMap(Map<String, dynamic> map) {
-    id = map['id'];
-    date = map['date'];
-    time = map['time'];
-    timestamp = map['timestamp'];
-  }
+  Dupe({this.id, this.date, this.time, this.timestamp, this.plate});
 }

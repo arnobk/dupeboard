@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'package:dupeboard/utils/dupe_utils.dart';
 import 'package:flutter/material.dart';
-import './utils/database.dart';
+import 'utils/database.dart';
+import 'utils/dupe_utils.dart';
 import 'chart_widget.dart';
 import 'cooldown_widget.dart';
 import 'loading_widget.dart';
