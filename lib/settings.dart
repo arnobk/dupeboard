@@ -261,6 +261,20 @@ class _SettingsState extends State<Settings> {
             ListTile(
               dense: true,
               title: Text(
+                'Feedback',
+                style: Theme.of(context).textTheme.headline4,
+              ),
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                color: Theme.of(context).accentColor,
+              ),
+              onTap: () {
+                Navigator.pushNamed(context, '/feedback');
+              },
+            ),
+            ListTile(
+              dense: true,
+              title: Text(
                 'Donate',
                 style: Theme.of(context).textTheme.headline4,
               ),

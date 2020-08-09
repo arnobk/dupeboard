@@ -8,6 +8,7 @@ import 'home_widget.dart';
 import 'developer.dart';
 import 'faq.dart';
 import 'custom_plate.dart';
+import 'feedback.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -49,6 +50,9 @@ class App extends StatelessWidget {
               case '/CustomPlates':
                 return CupertinoPageRoute(
                     builder: (_) => CustomPlateScreen(), settings: settings);
+              case '/feedback':
+                return CupertinoPageRoute(
+                    builder: (_) => FeedbackScreen(), settings: settings);
               default:
                 return CupertinoPageRoute(
                     builder: (_) => Home(), settings: settings);

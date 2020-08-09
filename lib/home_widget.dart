@@ -12,6 +12,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  DateTime currentBackPressTime;
   int _currentIndex = 0;
   List<Widget> _children = [
     Dupeboard(),
@@ -27,55 +28,58 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: scaffoldKey,
-      appBar: AppBar(
-        title: Text(
-          'Dupeboard',
-          style: Theme.of(context).appBarTheme.textTheme.headline6,
+    return WillPopScope(
+      onWillPop: onWillPop,
+      child: Scaffold(
+        key: scaffoldKey,
+        appBar: AppBar(
+          title: Text(
+            'Dupeboard',
+            style: Theme.of(context).appBarTheme.textTheme.headline6,
+          ),
+          brightness: Theme.of(context).appBarTheme.brightness,
+          centerTitle: true,
+          backgroundColor: Theme.of(context).appBarTheme.color,
+          elevation: 0,
         ),
-        brightness: Theme.of(context).appBarTheme.brightness,
-        centerTitle: true,
-        backgroundColor: Theme.of(context).appBarTheme.color,
-        elevation: 0,
-      ),
-      body: SafeArea(
-        child: _children[_currentIndex],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Theme.of(context).canvasColor,
-        unselectedItemColor: Theme.of(context).primaryColorLight,
-        selectedItemColor: Theme.of(context).accentColor,
-        elevation: 8.0,
-        onTap: onTabTapped,
-        currentIndex: _currentIndex,
-        items: [
-          BottomNavigationBarItem(
-            icon: Transform.rotate(
-              angle: 90 * 3.14159 / 180,
-              child: Icon(
-                Icons.whatshot,
+        body: SafeArea(
+          child: _children[_currentIndex],
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Theme.of(context).canvasColor,
+          unselectedItemColor: Theme.of(context).primaryColorLight,
+          selectedItemColor: Theme.of(context).accentColor,
+          elevation: 8.0,
+          onTap: onTabTapped,
+          currentIndex: _currentIndex,
+          items: [
+            BottomNavigationBarItem(
+              icon: Transform.rotate(
+                angle: 90 * 3.14159 / 180,
+                child: Icon(
+                  Icons.whatshot,
+                ),
               ),
+              title: new Text('Dupeboard'),
             ),
-            title: new Text('Dupeboard'),
-          ),
-          BottomNavigationBarItem(
-            icon: new Icon(Icons.history),
-            title: new Text('History'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            title: Text('Settings'),
-          )
-        ],
+            BottomNavigationBarItem(
+              icon: new Icon(Icons.history),
+              title: new Text('History'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              title: Text('Settings'),
+            )
+          ],
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () => _showAddDupeSheet(),
+          label: Text('Add Dupe'),
+          icon: Icon(Icons.add),
+          elevation: 2,
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _showAddDupeSheet(),
-        label: Text('Add Dupe'),
-        icon: Icon(Icons.add),
-        elevation: 2,
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
@@ -107,5 +111,21 @@ class _HomeState extends State<Home> {
           duration: Duration(seconds: 2),
         ));
     }
+  }
+
+  Future<bool> onWillPop() {
+    DateTime now = DateTime.now();
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime) > Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      scaffoldKey.currentState
+        ..removeCurrentSnackBar()
+        ..showSnackBar(SnackBar(
+          content: Text('Press back button again to exit Dupeboard.'),
+          duration: Duration(seconds: 2),
+        ));
+      return Future.value(false);
+    }
+    return Future.value(true);
   }
 }

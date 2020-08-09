@@ -13,9 +13,9 @@ class FAQScreen extends StatelessWidget {
           'When ever you sell any car on GTA Online just add that sale inside the App using "Add Dupe" button from Main Screen. The app will take care of the rest.',
     },
     {
-      'question': 'Is internet connection a must to use Dupeboard?',
+      'question': 'Is internet connection mandatory to use Dupeboard?',
       'answer':
-          'This app is fully functional in Offline mode. Your data is stored in your device. However, this app will collect device information and crash report whenever it gets internet connection.',
+          'This app is fully functional in Offline mode. Your data is stored in your device. However, this app will collect usage information and crash report via Firebase whenever it gets internet connection.',
     },
     {
       'question': 'What to do before updating Dupeboard?',
@@ -55,7 +55,7 @@ class FAQScreen extends StatelessWidget {
     {
       'question': 'Does Dupeboard collect any data from my device?',
       'answer':
-          'Yes, this app collect your device information and crash reports to improve the app.',
+          'Yes, Dupeboard collects your usage information and crash reports via Google Firebase to improve the app.',
     },
   ];
 

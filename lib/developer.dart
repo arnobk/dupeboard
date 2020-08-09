@@ -71,7 +71,7 @@ class DeveloperScreen extends StatelessWidget {
                     width: 28,
                   ),
                   onPressed: () =>
-                      _launchURL('https://reddit.com/igeniusarnob'),
+                      _launchURL('https://www.reddit.com/user/igeniusarnob/'),
                 ),
                 IconButton(
                   icon: Image.asset(
