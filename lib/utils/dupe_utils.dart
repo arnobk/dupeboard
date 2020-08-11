@@ -18,31 +18,77 @@ class DupeUtils {
 
   getNotificationTimeAndScheduleNotification() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool notifyFive =
-        prefs.getBool('nFive') != null ? prefs.getBool('nFive') : true;
-    bool notifySix =
-        prefs.getBool('nSix') != null ? prefs.getBool('nSix') : true;
+    bool notifyTwo =
+        prefs.getBool('notifyTwo') != null ? prefs.getBool('notifyTwo') : true;
+    bool notifyOne =
+        prefs.getBool('notifyOne') != null ? prefs.getBool('notifyOne') : true;
 
-    DBProvider.db.getNotificationTime().then((value) {
-      if (value.length > 5 && notifyFive) {
-        _createScheduledNotification(
-          value[5],
-          5,
-          'Ready For Back to Back Dupe Sale',
-          'Your dupe sale count for last 30 hours is now 5. Go, Grab some \$GTA.',
-        );
-      } else if (value.length <= 5) {
-        cancelScheduledNotification(5);
+    DBProvider.db.getNotificationTime().then((notificationTimes) {
+      int twoHours = 0;
+      for (int i = 0; i < notificationTimes.length; i++) {
+        if (notificationTimes[i] - DateTime.now().millisecondsSinceEpoch >
+            28 * 3600 * 1000) {
+          twoHours++;
+        }
       }
-      if (value.length > 6 && notifySix) {
+      //print('twoHours: $twoHours');
+      if (notificationTimes.length > 5 && notifyTwo) {
+        DateTime scheduleTime =
+            DateTime.fromMillisecondsSinceEpoch(notificationTimes[5]).isAfter(
+                    DateTime.fromMillisecondsSinceEpoch(notificationTimes[0])
+                        .subtract(Duration(hours: 28)))
+                ? DateTime.fromMillisecondsSinceEpoch(notificationTimes[5])
+                : DateTime.fromMillisecondsSinceEpoch(notificationTimes[0])
+                    .subtract(Duration(hours: 28));
+        print('notify2 scheduled at $scheduleTime');
         _createScheduledNotification(
-          value[6],
-          6,
-          'Dupe Sale Cooldown Achieved',
-          'Your dupe sale count for last 30 hours is now below 7. You can start selling.',
+          scheduleTime.millisecondsSinceEpoch,
+          2,
+          'Ready For Back to Back Dupe Sale',
+          'Two car sale slot is available now. Go, Grab some \$GTA.',
         );
-      } else if (value.length <= 6) {
-        cancelScheduledNotification(6);
+      } else if (notificationTimes.length <= 5 && twoHours > 0 && notifyTwo) {
+        DateTime scheduleTime =
+            DateTime.fromMillisecondsSinceEpoch(notificationTimes[0])
+                .subtract(Duration(hours: 28));
+        print('notify2/2 scheduled at $scheduleTime');
+        _createScheduledNotification(
+          scheduleTime.millisecondsSinceEpoch,
+          2,
+          'Ready For Back to Back Dupe Sale',
+          'Two car sale slot is available now. Go, Grab some \$GTA.',
+        );
+      } else {
+        cancelScheduledNotification(2);
+      }
+      if (notificationTimes.length > 6 && notifyOne) {
+        DateTime scheduleTime =
+            DateTime.fromMillisecondsSinceEpoch(notificationTimes[6]).isAfter(
+                    DateTime.fromMillisecondsSinceEpoch(notificationTimes[1])
+                        .subtract(Duration(hours: 28)))
+                ? DateTime.fromMillisecondsSinceEpoch(notificationTimes[6])
+                : DateTime.fromMillisecondsSinceEpoch(notificationTimes[1])
+                    .subtract(Duration(hours: 28));
+        print('notify1 scheduled at $scheduleTime');
+        _createScheduledNotification(
+          scheduleTime.millisecondsSinceEpoch,
+          1,
+          'One car sale slot is available.',
+          'You haven\'t sold any car for a while. You can start selling right now.',
+        );
+      } else if (notificationTimes.length <= 6 && twoHours > 1 && notifyOne) {
+        DateTime scheduleTime =
+            DateTime.fromMillisecondsSinceEpoch(notificationTimes[1])
+                .subtract(Duration(hours: 28));
+        print('notify1/1 scheduled at $scheduleTime');
+        _createScheduledNotification(
+          scheduleTime.millisecondsSinceEpoch,
+          1,
+          'One car sale slot is available.',
+          'You haven\'t sold any car for a while. You can start selling right now.',
+        );
+      } else {
+        cancelScheduledNotification(1);
       }
     });
   }
@@ -86,7 +132,7 @@ class DupeUtils {
         id,
         title,
         body,
-        DateTime.fromMillisecondsSinceEpoch(time).add(Duration(hours: 30)),
+        DateTime.fromMillisecondsSinceEpoch(time),
         //DateTime.now().add(Duration(seconds: 10)),
         platformChannelSpecifics);
   }
@@ -101,6 +147,7 @@ class DupeUtils {
 
   cancelScheduledNotification(int id) {
     FlutterLocalNotificationsPlugin().cancel(id);
+    print('canceled notify$id');
   }
 
   Future<bool> checkStoragePermission(BuildContext context) async {

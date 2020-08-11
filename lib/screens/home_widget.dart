@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:package_info/package_info.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'add_dupe.dart';
 import 'dupe_list.dart';
 import 'dupeboard.dart';
 import 'settings.dart';
+import '../utils/dupe_utils.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -12,6 +16,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  bool isAutoUpdateCheck;
   DateTime currentBackPressTime;
   int _currentIndex = 0;
   List<Widget> _children = [
@@ -24,6 +29,51 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+    _updateCheck();
+  }
+
+  _updateCheck() async {
+    isAutoUpdateCheck = await _getUpdatePref('isAutoUpdateCheck');
+    print(isAutoUpdateCheck);
+    if (isAutoUpdateCheck) {
+      var version = await DupeUtils.services.checkForUpdates();
+      PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      if (version != packageInfo.version && version != 'N/A') {
+        showDialog(
+            context: context,
+            builder: (BuildContext cntx) {
+              return AlertDialog(
+                title: new Text("Dupeboard Update Available!"),
+                content: new Text(
+                    "There is a new version of Dupeboard is available to download. Please make a backup of your database from settings before updating."),
+                actions: <Widget>[
+                  new FlatButton(
+                    child: new Text("Cancel"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  new FlatButton(
+                    child: new Text("Update"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      _launchURL(
+                          'https://github.com/arnobk/dupeboard/releases/tag/$version');
+                    },
+                  ),
+                ],
+              );
+            });
+      }
+    }
+  }
+
+  _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   @override
@@ -127,5 +177,10 @@ class _HomeState extends State<Home> {
       return Future.value(false);
     }
     return Future.value(true);
+  }
+
+  _getUpdatePref(String updatePref) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(updatePref) != null ? prefs.getBool(updatePref) : true;
   }
 }

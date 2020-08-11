@@ -3,8 +3,8 @@ import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'utils/app_state_notifier.dart';
-import 'utils/dupe_utils.dart';
+import '../utils/app_state_notifier.dart';
+import '../utils/dupe_utils.dart';
 
 class Settings extends StatefulWidget {
   @override
@@ -12,21 +12,24 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  bool nForCountFive;
-  bool nForCountSix;
+  bool notifyTwo;
+  bool notifyOne;
+  bool isAutoUpdateCheck;
   String currentAppVersion = '';
   @override
   void initState() {
     super.initState();
-    nForCountFive = true;
-    nForCountSix = true;
+    notifyTwo = true;
+    notifyOne = true;
+    isAutoUpdateCheck = true;
     _getCurrentVersion();
     _getPrefValues();
   }
 
   _getPrefValues() async {
-    nForCountFive = await _getNotificationPref('nFive');
-    nForCountSix = await _getNotificationPref('nSix');
+    notifyTwo = await _getNotificationPref('notifyTwo');
+    notifyOne = await _getNotificationPref('notifyOne');
+    isAutoUpdateCheck = await _getUpdatePref('isAutoUpdateCheck');
   }
 
   @override
@@ -167,41 +170,31 @@ class _SettingsState extends State<Settings> {
               ),
             ),
             ListTile(
-              dense: true,
               title: Text(
-                'Sale count reaches 6',
+                'Notify when ONE sale slot is available',
                 style: Theme.of(context).textTheme.headline4,
               ),
-              subtitle: Text(
-                'In last 30 hours',
-                style: Theme.of(context).textTheme.headline5,
-              ),
               trailing: Switch(
-                  value: nForCountSix,
+                  value: notifyOne,
                   onChanged: (value) {
-                    _setNotificationPref('nSix', 6, value);
+                    _setNotificationPref('notifyOne', 1, value);
                     setState(() {
-                      nForCountSix = value;
+                      notifyOne = value;
                     });
                   }),
               selected: true,
             ),
             ListTile(
-              dense: true,
               title: Text(
-                'Sale count reaches 5',
+                'Notify when TWO sale slot is available',
                 style: Theme.of(context).textTheme.headline4,
               ),
-              subtitle: Text(
-                'In last 30 hours',
-                style: Theme.of(context).textTheme.headline5,
-              ),
               trailing: Switch(
-                  value: nForCountFive,
+                  value: notifyTwo,
                   onChanged: (value) {
-                    _setNotificationPref('nFive', 5, value);
+                    _setNotificationPref('notifyTwo', 2, value);
                     setState(() {
-                      nForCountFive = value;
+                      notifyTwo = value;
                     });
                   }),
               selected: true,
@@ -216,6 +209,21 @@ class _SettingsState extends State<Settings> {
                 color: Colors.grey[600],
                 fontWeight: FontWeight.w600,
               ),
+            ),
+            ListTile(
+              title: Text(
+                'Automatically check for update on startup',
+                style: Theme.of(context).textTheme.headline4,
+              ),
+              trailing: Switch(
+                  value: isAutoUpdateCheck,
+                  onChanged: (value) {
+                    _setUpdatePref('isAutoUpdateCheck', value);
+                    setState(() {
+                      isAutoUpdateCheck = value;
+                    });
+                  }),
+              selected: true,
             ),
             ListTile(
               dense: true,
@@ -275,7 +283,7 @@ class _SettingsState extends State<Settings> {
             ListTile(
               dense: true,
               title: Text(
-                'Donate',
+                'Donate on Patreon',
                 style: Theme.of(context).textTheme.headline4,
               ),
               trailing: Icon(
@@ -283,7 +291,7 @@ class _SettingsState extends State<Settings> {
                 color: Theme.of(context).accentColor,
               ),
               onTap: () {
-                Navigator.pushNamed(context, '/developer');
+                _launchURL('https://www.patreon.com/arnobk');
               },
             ),
             ListTile(
@@ -382,9 +390,9 @@ class _SettingsState extends State<Settings> {
           context: context,
           builder: (BuildContext cntx) {
             return AlertDialog(
-              title: new Text("Update Available!"),
+              title: new Text("Dupeboard Update Available!"),
               content: new Text(
-                  "There is a new version of this app is available to download."),
+                  "There is a new version of Dupeboard is available to download. Please make a backup of your database from settings before updating."),
               actions: <Widget>[
                 new FlatButton(
                   child: new Text("Cancel"),
@@ -433,7 +441,11 @@ class _SettingsState extends State<Settings> {
   _setNotificationPref(String notificationId, int id, bool value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool(notificationId, value);
-    DupeUtils.services.cancelScheduledNotification(id);
+    if (!value) {
+      DupeUtils.services.cancelScheduledNotification(id);
+    } else {
+      DupeUtils.services.getNotificationTimeAndScheduleNotification();
+    }
   }
 
   _getNotificationPref(String notificationId) async {
@@ -441,5 +453,15 @@ class _SettingsState extends State<Settings> {
     return prefs.getBool(notificationId) != null
         ? prefs.getBool(notificationId)
         : true;
+  }
+
+  _setUpdatePref(String updatePref, bool value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(updatePref, value);
+  }
+
+  _getUpdatePref(String updatePref) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(updatePref) != null ? prefs.getBool(updatePref) : true;
   }
 }

@@ -53,6 +53,10 @@ class AppTheme {
         fontSize: 12,
         fontWeight: FontWeight.w500,
       ),
+      caption: TextStyle(
+        color: Colors.grey[500],
+        fontSize: 16,
+      ),
     ),
     canvasColor: Color(0xFFFFFFFF),
     appBarTheme: AppBarTheme(
@@ -64,6 +68,14 @@ class AppTheme {
           fontSize: 20,
           fontWeight: FontWeight.w600,
         ),
+      ),
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      enabledBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: Colors.grey),
+      ),
+      focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: Colors.blue),
       ),
     ),
   );
@@ -127,6 +139,10 @@ class AppTheme {
         fontSize: 12,
         fontWeight: FontWeight.w500,
       ),
+      caption: TextStyle(
+        color: Colors.grey[500],
+        fontSize: 16,
+      ),
     ),
     errorColor: Colors.red[900],
     bottomAppBarColor: Colors.blue[900],
@@ -140,6 +156,14 @@ class AppTheme {
           fontSize: 20,
           fontWeight: FontWeight.w600,
         ),
+      ),
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      enabledBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: Colors.grey[800]),
+      ),
+      focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: Colors.blue[900]),
       ),
     ),
   );

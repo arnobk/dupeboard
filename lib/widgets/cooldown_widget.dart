@@ -140,7 +140,7 @@ class _CooldownWidgetState extends State<CooldownWidget> {
   }
 
   _getDupeCoolDown() {
-    DBProvider.db.getNotificationTime().then((value) {
+    DBProvider.db.getCooldownTime().then((value) {
       setState(() {
         value = value.reversed.toList();
         for (int i = 0; i < value.length; i++) {

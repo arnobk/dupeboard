@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import './utils/database.dart';
-import './models/dupe.dart';
+import '../utils/database.dart';
+import '../models/dupe.dart';
 
 class AddDupe extends StatefulWidget {
   AddDupe();

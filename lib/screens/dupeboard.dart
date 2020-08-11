@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'utils/database.dart';
-import 'utils/dupe_utils.dart';
-import 'chart_widget.dart';
-import 'cooldown_widget.dart';
-import 'loading_widget.dart';
+import '../utils/database.dart';
+import '../utils/dupe_utils.dart';
+import '../widgets/chart_widget.dart';
+import '../widgets/cooldown_widget.dart';
+import '../widgets/loading_widget.dart';
 
 class Dupeboard extends StatefulWidget {
   @override

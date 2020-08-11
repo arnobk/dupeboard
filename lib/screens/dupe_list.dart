@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import './utils/database.dart';
+import '../utils/database.dart';
 
 class DupeList extends StatefulWidget {
   @override

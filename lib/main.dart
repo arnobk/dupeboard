@@ -4,11 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'utils/app_theme.dart';
 import 'utils/app_state_notifier.dart';
-import 'home_widget.dart';
-import 'developer.dart';
-import 'faq.dart';
-import 'custom_plate.dart';
-import 'feedback.dart';
+import 'screens/home_widget.dart';
+import 'screens/developer.dart';
+import 'screens/faq.dart';
+import 'screens/custom_plate.dart';
+import 'screens/feedback.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(

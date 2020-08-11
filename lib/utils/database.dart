@@ -144,6 +144,28 @@ class DBProvider {
     List<int> notificationTime = [];
     await db
         .rawQuery(
+            'SELECT * from dupes WHERE timestamp > ${DateTime.now().subtract(Duration(hours: 30)).millisecondsSinceEpoch} ORDER BY timestamp DESC')
+        .then((value) {
+      for (int i = 0; i < value.length; i++) {
+        notificationTime.add(
+            DateTime.fromMillisecondsSinceEpoch(value[i]['timestamp'])
+                .add(Duration(hours: 30))
+                .millisecondsSinceEpoch);
+      }
+      notificationTime.sort();
+      notificationTime = notificationTime.reversed.toList();
+      // for (int i = 0; i < notificationTime.length; i++) {
+      //   print(DateTime.fromMillisecondsSinceEpoch(notificationTime[i]));
+      // }
+    });
+    return notificationTime;
+  }
+
+  Future<List<int>> getCooldownTime() async {
+    final db = await getDb();
+    List<int> notificationTime = [];
+    await db
+        .rawQuery(
             'SELECT * from dupes WHERE timestamp > ${DateTime.now().millisecondsSinceEpoch - 30 * 60 * 60000} ORDER BY timestamp DESC')
         .then((value) {
       for (int i = 0; i < value.length; i++) {

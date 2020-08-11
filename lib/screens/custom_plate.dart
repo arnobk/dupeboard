@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'utils/database.dart';
-import 'models/plate.dart';
+import '../utils/database.dart';
+import '../models/plate.dart';
 
 class CustomPlateScreen extends StatefulWidget {
   @override
@@ -96,6 +96,11 @@ class _CustomPlateScreenState extends State<CustomPlateScreen> {
             style: Theme.of(context).textTheme.headline5,
             decoration: InputDecoration(
               hintText: 'License Plate',
+              hintStyle: Theme.of(context).textTheme.caption,
+              prefixIcon: Icon(
+                Icons.confirmation_number,
+                color: Theme.of(context).accentColor,
+              ),
             ),
           ),
           actions: <Widget>[
@@ -153,18 +158,30 @@ class _CustomPlateScreenState extends State<CustomPlateScreen> {
   }
 
   _addToDatabase() {
-    var plate = Plate(license: _addLicenseTextController.text);
-    DBProvider.db.newPlate(plate);
-    Navigator.pop(context, "New License Plate Added!");
-    _addLicenseTextController.text = '';
-    scaffoldKey.currentState
-      ..removeCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          content: Text('License Plate Added!'),
-          duration: Duration(seconds: 2),
-        ),
-      );
+    if (_addLicenseTextController.text.isEmpty) {
+      Navigator.pop(context, "License plate is empty!");
+      scaffoldKey.currentState
+        ..removeCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text('License plate is empty!'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+    } else {
+      var plate = Plate(license: _addLicenseTextController.text.toUpperCase());
+      DBProvider.db.newPlate(plate);
+      Navigator.pop(context, "License plate added!");
+      _addLicenseTextController.text = '';
+      scaffoldKey.currentState
+        ..removeCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text('License Plate Added!'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+    }
   }
 
   _getCustomPlates() async {
