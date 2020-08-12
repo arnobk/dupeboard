@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:package_info/package_info.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'add_dupe.dart';
-import 'dupe_list.dart';
+import 'dupe_history.dart';
 import 'dupeboard.dart';
 import 'settings.dart';
 import '../utils/dupe_utils.dart';
@@ -21,7 +21,7 @@ class _HomeState extends State<Home> {
   int _currentIndex = 0;
   List<Widget> _children = [
     Dupeboard(),
-    DupeList(),
+    DupeHistory(),
     Settings(),
   ];
   final scaffoldKey = GlobalKey<ScaffoldState>();

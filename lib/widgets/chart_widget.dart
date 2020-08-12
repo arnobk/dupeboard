@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'utils/database.dart';
+import '../utils/database.dart';
 import 'dart:math';
 
 class ChartWidget extends StatefulWidget {

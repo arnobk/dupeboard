@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:package_info/package_info.dart';
 
 class FeedbackScreen extends StatefulWidget {
   @override
@@ -16,6 +17,8 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
   TextEditingController _feedbackEmail = new TextEditingController();
   TextEditingController _feedbackMessage = new TextEditingController();
   String _feedbackTopic;
+  String _appVersion;
+  String _buildNumber;
 
   _sendFeedback() {
     collectionReference.add({
@@ -23,6 +26,8 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
       'email': _feedbackEmail.text,
       'topic': _feedbackTopic,
       'message': _feedbackMessage.text,
+      'app_version': _appVersion,
+      'build_number': _buildNumber,
       'time': DateTime.now(),
       'timestamp': DateTime.now().millisecondsSinceEpoch,
     });
@@ -39,6 +44,20 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
           content: Text('Feedback sent!'),
         ),
       );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getPackageInfo();
+  }
+
+  _getPackageInfo() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    setState(() {
+      _buildNumber = packageInfo.buildNumber;
+      _appVersion = packageInfo.version;
+    });
   }
 
   @override

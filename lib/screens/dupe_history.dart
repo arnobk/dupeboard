@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../utils/database.dart';
 
-class DupeList extends StatefulWidget {
+class DupeHistory extends StatefulWidget {
   @override
-  _DupeListState createState() => _DupeListState();
+  _DupeHistoryState createState() => _DupeHistoryState();
 }
 
-class _DupeListState extends State<DupeList> {
+class _DupeHistoryState extends State<DupeHistory> {
   var dupeData = [];
   @override
   void initState() {
@@ -65,11 +65,12 @@ class _DupeListState extends State<DupeList> {
                     ),
                   )
                 : ListTile(
+                    isThreeLine: true,
                     dense: true,
                     leading: Container(
                       height: double.infinity,
                       child: Icon(
-                        Icons.calendar_today,
+                        Icons.confirmation_number,
                         size: 28,
                         color: Theme.of(context).iconTheme.color,
                       ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'utils/database.dart';
+import '../utils/database.dart';
 
 class CooldownWidget extends StatefulWidget {
   @override

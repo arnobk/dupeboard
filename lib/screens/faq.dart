@@ -55,7 +55,7 @@ class FAQScreen extends StatelessWidget {
     {
       'question': 'Does Dupeboard collect any data from my device?',
       'answer':
-          'Yes, Dupeboard collects your usage information and crash reports via Google Firebase to improve the app.',
+          'Yes, Dupeboard collects your usage information via Google Firebase to improve the app.',
     },
   ];
 
