@@ -19,7 +19,7 @@ Special thanks to this [r/gtaglitches](https://www.reddit.com/r/gtaglitches/comm
 - Android 5.0 Lollipop (API level 21)
 
 ## Releases
-You can download the **Android App** for your device from **Releases** tab or by visiting [here](https://github.com/igeniusarnob/dupeboard/releases). 
+You can download the **Android App** for your device from **Releases** tab or by visiting [here](https://github.com/arnobk/dupeboard/releases). 
 
 ## Features
 - Track car sell limits with custom license plates.
